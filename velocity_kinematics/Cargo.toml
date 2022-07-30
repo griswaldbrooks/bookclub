@@ -1,0 +1,8 @@
+[package]
+name = "velocity_kinematics"
+version = "0.1.0"
+edition = "2021"
+authors = ["Griswald Brooks <griswald.brooks@gmail.com>"]
+
+[dependencies]
+nalgebra = "0.31.0"

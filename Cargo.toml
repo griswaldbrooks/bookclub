@@ -1,3 +1,6 @@
 [workspace]
 
-members = ["velocity_kinematics"]
+members = [
+"motion",
+"velocity_kinematics",
+]

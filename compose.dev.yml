@@ -8,10 +8,15 @@ services:
         USER: ${USER}
       context: .
       dockerfile: Dockerfile
-    command: bash -c "echo '=== Entering ${REPO}-dev ===' &&
+    command: bash -c "echo '' &&
+                      nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' &&
+                      echo '' &&
+                      echo '=== Entering ${REPO}-dev ===' &&
                       bash"
     container_name: ${USER}-${REPO}-dev
     environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
       - TERM=xterm-256color
     extra_hosts:
       - ${REPO}-dev:127.0.0.1
@@ -24,6 +29,8 @@ services:
       - ~/.ssh:${HOME}/.ssh:ro
       - ~/.gitconfig:${HOME}/.gitconfig:ro
       - ${PWD}:${HOME}/ws/${REPO}
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - ${XDG_RUNTIME_DIR}:${XDG_RUNTIME_DIR}:ro
       - /etc/group:/etc/group:ro
       - /etc/passwd:/etc/passwd:ro
       - /etc/shadow:/etc/shadow:ro

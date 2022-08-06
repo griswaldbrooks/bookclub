@@ -18,8 +18,13 @@ RUN apt update -y &&       \
         vim                \
         wget
 
+RUN wget -O /tmp/nvim-linux64.deb https://github.com/neovim/neovim/releases/download/v0.7.0/nvim-linux64.deb && \
+    apt install -y /tmp/nvim-linux64.deb
+
+RUN git clone https://github.com/AstroNvim/AstroNvim /home/${USER}/.config/nvim
+
 # Get rust tools
-RUN rustup component add rustfmt
+RUN rustup component add rustfmt clippy
 
 # Get dependencies and download code
 COPY . /tmp/ws

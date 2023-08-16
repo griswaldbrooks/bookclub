@@ -11,7 +11,8 @@ python = "^3.10"
 numpy = "^1.25.2"
 streamlit = "^1.25.0"
 plotly = "^5.16.1"
-pydrake = "^0.2.1"
+drake = "^1.19.0"
+matplotlib = "^3.7.2"
 
 
 [build-system]

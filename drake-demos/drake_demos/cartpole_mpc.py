@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import time
 from pydrake.symbolic import sin, cos, pow
 
-def main():
+def compute():
     dt = 0.01
     N = 100
     pole_length = 1
@@ -66,8 +66,8 @@ def main():
     return q_opt, qd_opt, F_opt
 
 
-if __name__ == '__main__':
-    q_opt, qd_opt, F_opt = main()
+def main():
+    q_opt, qd_opt, F_opt = compute()
     figure = plt.figure()
     plt.plot(q_opt[:,0])
     plt.title("Cart Position")
@@ -81,3 +81,6 @@ if __name__ == '__main__':
     plt.plot(np.sin(q_opt[:,1]) + q_opt[:, 0], np.cos(q_opt[:,1]))
     plt.title("Pole y vs x position")
     plt.show()
+
+if __name__ == '__main__':
+    main()

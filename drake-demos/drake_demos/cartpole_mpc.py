@@ -1,10 +1,13 @@
+import streamlit as st
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
 import numpy as np
 from pydrake.math import eq
 from pydrake.multibody.plant import MultibodyPlant
 from pydrake.multibody.tree import SpatialInertia, PrismaticJoint, RevoluteJoint
 from pydrake.solvers import MathematicalProgram, Solve
 import matplotlib.pyplot as plt
-import time
 from pydrake.symbolic import sin, cos, pow
 
 def compute():
@@ -68,19 +71,32 @@ def compute():
 
 def main():
     q_opt, qd_opt, F_opt = compute()
-    figure = plt.figure()
-    plt.plot(q_opt[:,0])
-    plt.title("Cart Position")
-    figure = plt.figure()
-    plt.plot(q_opt[:,1])
-    plt.title("Angle")
-    force_figure = plt.figure()
-    plt.plot(F_opt)
-    plt.title("Force")
-    xy_figure = plt.figure()
-    plt.plot(np.sin(q_opt[:,1]) + q_opt[:, 0], np.cos(q_opt[:,1]))
-    plt.title("Pole y vs x position")
-    plt.show()
 
+    st.set_page_config(layout="wide", page_title="Cartpole MPC", page_icon=":car:")
+    st.title("Cartpole MPC")
+    st.header("Cart Position")
+    # Stack the data
+    x1 = np.sin(q_opt[:, 1]) + q_opt[:, 0]
+    y1 = np.cos(q_opt[:, 1])
+
+    x2 = x1 + 1  # Offset for demonstration
+    y2 = y1 + 1
+
+    x = np.concatenate([x1, x2])
+    y = np.concatenate([y1, y2])
+    animation_frame = list(np.arange(0, q_opt.shape[0])) * 2
+    group = ['Original'] * len(x1) + ['Offset'] * len(x2)
+
+    df = pd.DataFrame({'x': x, 'y': y, 'frame': animation_frame, 'group': group})
+
+    fig = px.scatter(df, x='x', y='y', animation_frame='frame', color='group', range_x=[-10, 10], range_y=[-10, 10])
+
+    # Add a second set of points to the scatter plot
+    # For the sake of demonstration, I'm just offsetting the original points, but you can replace this with your actual data
+    fig.add_trace(
+        go.Scatter(x=np.sin(q_opt[:,1]) + q_opt[:, 0] + 1, y=np.cos(q_opt[:,1]) + 1)
+    )
+    
+    st.write(fig)
 if __name__ == '__main__':
     main()
